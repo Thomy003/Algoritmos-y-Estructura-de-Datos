@@ -1,0 +1,213 @@
+------------------------------------- Ejercicio 1 -------------------------------------
+
+--a) 
+longitud :: [t] -> Integer
+longitud [] = 0
+longitud l | otherwise = 1 + longitud(tail l)
+
+--b)
+ultimo :: [t] -> t
+ultimo lista = lista !! ((length lista) - 1)
+-- length es una funcion predefinida que cuenta la cantidad de elementos en Haskell
+-- "xs !! n" es el elemento n–ésimo de xs
+
+--c)
+principio :: (Eq t) => [t] -> [t]
+principio (y : listac) | listac == [] = []
+                       | otherwise = [y] ++ principio(listac)
+
+--d) 
+reverso :: [t] -> [t]
+reverso [] = []
+reverso (x : listad) = reverso listad ++ [x]
+
+
+
+------------------------------------- Ejercicio 2 -------------------------------------
+
+--a) 
+pertenece :: (Eq t) => t -> [t] -> Bool
+pertenece _ [] = False
+pertenece x lista2a | head lista2a == x = True
+                    | lista2a == [] = False
+                    | otherwise = pertenece x (tail lista2a)
+
+--b) 
+todosIguales :: (Eq t) => [t] -> Bool
+todosIguales [] = True
+todosIguales (x : lista2b) | (lista2b == []) = True
+                           | comparador == True = todosIguales(lista2b)
+                           | otherwise = False
+                           where comparador = x == head lista2b
+
+--c) 
+todosDistintos :: (Eq t) => [t] -> Bool
+todosDistintos [] = True
+todosDistintos (x : lista2c) | (lista2c == []) = True
+                             | (pertenece x lista2c) == False = todosDistintos(lista2c)
+                             | otherwise = False
+
+--d)                             
+hayRepetidos :: (Eq t) => [t] -> Bool
+hayRepetidos [] = True
+hayRepetidos (x : lista2d) | (lista2d == []) = False
+                           | (pertenece x lista2d) == True = True
+                           | otherwise = hayRepetidos(lista2d)
+
+--e)
+quitar :: (Eq t) => t -> [t] -> [t]        
+quitar _ [] = []
+quitar x lista2e | pertenece x lista2e == False = lista2e
+                 | pertenece x lista2e == True = eliminoElPrimerX x lista2e 
+
+eliminoElPrimerX :: (Eq t) => t -> [t] -> [t]
+eliminoElPrimerX x (y : lista2e) | y == x = lista2e
+                                 | y /= x = [y] ++ eliminoElPrimerX x lista2e  
+
+--f)
+quitarTodos :: (Eq t ) => t -> [t] -> [t]
+quitarTodos _ [] = []
+quitarTodos x lista2f | pertenece x lista2f == False = lista2f
+                      | pertenece x lista2f == True = verificador x lista2f
+
+verificador :: (Eq t ) => t -> [t] -> [t]
+verificador x lista2f | lista2f == [] = []
+                      | head lista2f == x = verificador x (tail lista2f)
+                      | otherwise = [head lista2f] ++ verificador x (tail lista2f)
+
+--g)                      
+eliminarRepetidos :: (Eq t) => [t] -> [t]
+eliminarRepetidos [] = []
+eliminarRepetidos (x : lista3g) | pertenece x lista3g == True = [x] ++ eliminarRepetidos( quitarTodos x lista3g)
+                                | pertenece x lista3g == False = [x] ++ eliminarRepetidos lista3g
+
+
+--h)
+mismosElementos :: (Eq t) => [t] -> [t] -> Bool
+mismosElementos lista2ha lista2hb | length (eliminarRepetidos lista2ha) == length (eliminarRepetidos lista2hb) = sameFunction lista2ha lista2hb
+                                  | otherwise = False
+
+sameFunction :: (Eq t) => [t] -> [t] -> Bool
+sameFunction [] _ = True                 --Esto lo pongo aca porque si lo pongo dentro de las guardas cuando la lista2ha tenga un elemento y corra la iteracion voy a tener que lista2ha ahora sera vacia entonces se corre este caso
+sameFunction (x : lista2ha) lista2hb | pertenece x lista2hb = sameFunction lista2ha lista2hb 
+                                     | otherwise = False 
+                              
+--i)
+capicua :: (Eq t) => [t] -> Bool
+capicua [] = True
+capicua (x : lista2g) | lista2g == [] = True
+                      | x == ultimo lista2g = capicua (tail (reverso lista2g))
+                      | x /= ultimo lista2g = False
+
+
+
+------------------------------------- Ejercicio 3 -------------------------------------                      
+
+--a)
+sumatoria :: [Integer] -> Integer
+sumatoria lista3a | length lista3a == 0 = 0
+                  | otherwise = head lista3a + sumatoria (tail lista3a)
+
+--b) 
+productoria :: [Integer] -> Integer
+productoria [] = 0
+productoria (x : lista3b) | length lista3b == 0 = x
+                          | otherwise = x * productoria lista3b
+
+--c) 
+maximo :: [Integer] -> Integer
+maximo [x] = x
+maximo (x : lista3c) | x > maximo(lista3c) = x 
+                     | otherwise = maximo lista3c
+--Lo que hago aca es comparar x con todos los elementos de la lista, hasta que llego a una lista de tipo [x] que me devuelve x, es decir para
+--[4,2,3] el programa haria 4 > maximo([3,2]) -> 4 > 2 > maximo([3]) -> 4 > 2 > 3 y no sigue preguntando gracias al caso maximo [x]
+                     
+
+--d)
+sumarN :: Integer -> [Integer] -> [Integer] 
+sumarN _ [] = []
+sumarN x (y : lista3d) = [(y + x)] ++ sumarN x lista3d
+
+--e)
+sumarElPrimero :: [Integer] -> [Integer]
+sumarElPrimero (x : lista3e) = [x + x]
+
+{- no se como seguirlo -}
+
+--f)
+sumarElUltimo :: [Integer] -> [Integer]
+sumarElUltimo (x : lista3f) | lista3f == [] = [x + x]
+                            | otherwise = [x + (ultimo lista3f)] ++ sumarElUltimo(lista3f)
+
+--g)
+pares :: [Integer] -> [Integer]
+pares [] = []
+pares (x : lista3g) | mod x 2 /= 0 = pares lista3g
+                    | otherwise = [x] ++ pares lista3g
+                    
+--h)
+multiplosDeN :: Integer -> [Integer] -> [Integer]                    
+multiplosDeN _ [] = []
+multiplosDeN y (x : lista3h) | mod x y /= 0 = multiplosDeN y lista3h
+                             | otherwise = [x] ++ multiplosDeN y lista3h
+
+--i)
+ordenar :: [Integer] -> [Integer]            
+ordenar lista3i | length lista3i > 0 = [minimo lista3i] ++ ordenar (quitar (minimo lista3i) lista3i)
+                | otherwise = []
+
+minimo :: [Integer] -> Integer
+minimo [x] = x
+minimo (x : lista3i) | x < minimo (lista3i) = x
+                     | otherwise = minimo lista3i
+
+------------------------------------- Ejercicio 4 -------------------------------------
+
+--a)
+--sacarBlancosRepetidos :: [Char] -> [Char]
+
+
+--b)
+contarPalabras :: [Char] -> Integer
+contarPalabras [] = 0
+contarPalabras (x : lista4b) | length lista4b == 0 = 1 
+                             | x == ' ' = 1 + contarPalabras lista4b
+                             | otherwise = contarPalabras lista4b
+
+--c)
+--palabraMasLarga :: [Char] -> [Char]
+--palabraMasLarga (x : lista4c) | (x == ' ') && (length lista4c == 0) = separarPalabras []
+  --                            | (x /= ' ') && (head lista4c == ' ') = separarPalabras
+    --                          | otherwise = [x] ++ palabraMasLarga lista4c
+
+--separarPalabras :: [Char] -> [Char] -> [Char]
+--separarPalabras [] = 
+--separarPalabras
+
+--d)
+
+--e)
+aplanar :: [[Char]] -> [Char]
+aplanar [[]] = []
+aplanar (x : lista4e) | length lista4e == 0 = x
+                      | otherwise = x ++ aplanar lista4e
+
+--f)
+aplanarConBlancos :: [[Char]] -> [Char]
+aplanarConBlancos [] = []
+aplanarConBlancos (x : lista4f) | length lista4f == 0 = x
+                                | otherwise = x ++ agregarBlancos (head lista4f) ++ aplanarConBlancos (tail lista4f)
+
+agregarBlancos :: [Char] -> [Char]                
+agregarBlancos lista4f = [' '] ++ lista4f ++ [' ']
+
+-- probar con [['h'],['o','l'],['a'],['h']]
+
+--g)
+aplanarConNBlancos :: [[Char]] -> Integer -> [Char]
+
+
+
+------------------------------------- Ejercicio 5 -------------------------------------
+
+--a)
